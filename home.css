@@ -1,0 +1,96 @@
+html {height: 100%;}
+body {
+    background: white;
+    margin: 0;
+    color: black;
+    height: 100%;
+}
+body div {overflow: hidden;}
+#sections {
+    margin-top: 1em
+}
+#sections > div {
+    color: black;
+    font-size: 16pt;
+    font-family: 'Georgia', sans-serif;
+    padding: 1em;
+    max-width: 800px;
+    border-radius: 1em;
+    margin: 0 auto;
+}
+#sections h2, #sections h3 {
+    margin-top: 0;
+    text-align: center;
+    font-style: italic;
+}
+#sections h2 {font-size: 120%;}
+#sections h3 {font-size: 100%; font-weight: normal;}
+#sections p {margin: 0.5em 0;}
+#sections p + p {text-indent: 1em;}
+.fa {text-indent: 0;}
+#sections img {
+    float: right;
+    max-width: 50%;
+    margin: 0 -1em 0 0.5em;
+}
+#sections .half {
+    float: left;
+    width: 50%;
+}
+#sections dd {
+    font-size: 80%;
+    margin-bottom: 0.5em;
+}
+#sections dt {margin-bottom: 0.2em;}
+#sections dd + dt {margin-top: 1em;}
+#header {
+    color: white;
+    font-family: 'Bitter';
+    font-size: 24pt;
+    text-shadow: 2px 2px 2px black;
+    height: 50%;
+    overflow: hidden;
+    box-shadow: 5px 5px 2px #333;
+}
+#header a {
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px dotted white;
+    text-align: center;
+}
+#header a:hover, #header a.active {
+    border-bottom: 3px solid;
+}
+#header #name {
+    cursor: pointer;
+    margin-left: 50px;
+    display: inline;
+    position: relative;
+    font-size: 72pt; text-shadow: 5px 5px 5px black;
+}
+#header #name span {
+    position: relative;
+}
+#header #tagline {
+    margin: 0 0 0 50px;
+    clear: both;
+}
+#header #nav {
+    display: inline;
+}
+#header #nav li {
+    display: inline;
+    padding-left: 30px;
+    list-style-type: none;
+    text-shadow: 4px 4px 4px black;
+}
+
+#nav .fa {margin-right: 0.5em;}
+#sections #contact {font-size: 20pt; text-align: center;}
+#sections #contact .fa {font-size: 100%; margin-right: 0.5em;}
+#sections #contact .fa-external-link {display: none;}
+#sections #contact li {list-style-type: none; margin-bottom: 1em;}
+
+.fa {font-size: 70%;}
+
+#ruler {text-align: center;}
