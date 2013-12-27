@@ -43,8 +43,8 @@
         ],
     ];
 
-    $imgName = $BG_IMAGES[array_rand($BG_IMAGES)]['name'];
-    echo "background-image: url('/home/backgrounds/$imgName.jpg');"; ?>
+    $img = $BG_IMAGES[array_rand($BG_IMAGES)];
+    echo "background-image: url('/home/backgrounds/".$img['name'].".jpg');"; ?>
     background-position: center right;
     background-repeat: no-repeat;
     background-size: cover;
@@ -69,7 +69,7 @@ window.BG_IMAGES = <?
     </ul>
     <p id="tagline">Perth, Western Australia</p>
     <i id="refresh" class="fa fa-refresh"></i>
-    <p id="caption"></p>
+    <p id="caption"><?= $img['desc'] ?></p>
 </div><!-- end #header -->
 
 <div id="sections">
