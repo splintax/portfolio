@@ -72,7 +72,7 @@ $(document).ready(function() {
         $('#tagline').hide();
 
         $('#header').animate({height: '30%'}, animToggle*800);
-        $('#spacer').animate({height: '50%'}, animToggle*800)
+        $('#spacer').animate({height: '40%'}, animToggle*800)
 
         var target = $(this).target();
         $(this).target().fadeIn().siblings().hide();
@@ -98,5 +98,17 @@ $(document).ready(function() {
     // external link icons
     // $('a[href^="http"]').after(' <i class="fa fa-external-link"></i>');
     $('a[href$="pdf"]').after(' <i class="fa fa-file-o"></i>');
+
+    $('#refresh').click(function() {
+        $('#header').css({opacity: 0});
+
+        // swap image
+        var img = window.BG_IMAGES.shift();
+        var url = 'url("http://sjy.id.au/home/images/' + img + '.jpg")';
+        $('#header').css('backgroundImage', url);
+        window.BG_IMAGES.push(img);
+
+        $('#header').animate({opacity: 1}, 500);
+    });
 
 });

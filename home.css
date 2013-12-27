@@ -27,7 +27,6 @@ body div {overflow: hidden;}
 #sections h3 {font-size: 100%; font-weight: normal;}
 #sections p {margin: 0.5em 0;}
 #sections p + p {text-indent: 1em;}
-.fa {text-indent: 0;}
 img.photo {
     float: right;
     max-width: 50%;
@@ -46,8 +45,8 @@ img.photo {
     font-family: 'Bitter';
     font-size: 24pt;
     text-shadow: 2px 2px 2px black;
-    height: 50%;
     overflow: hidden;
+    position: relative;
     box-shadow: 5px 5px 2px #333;
 }
 #header a {
@@ -73,9 +72,6 @@ img.photo {
     margin: 0 0 0 50px;
     clear: both;
 }
-#header #nav {
-    display: inline;
-}
 #header #nav li {
     display: inline;
     padding-left: 30px;
@@ -83,13 +79,14 @@ img.photo {
     text-shadow: 4px 4px 4px black;
 }
 
-#nav .fa {margin-right: 0.5em;}
 #sections #contact {font-size: 20pt; text-align: center;}
 #sections #contact .fa {font-size: 100%; margin-right: 0.5em;}
 #sections #contact .fa-external-link {display: none;}
 #sections #contact li {list-style-type: none; margin-bottom: 1em;}
 
-.fa {font-size: 70%;}
+.fa {text-indent: 0; font-size: 70%;}
+#nav .fa {margin-right: 0.5em;}
+#header #refresh.fa {position: absolute; bottom: 1em; right: 1em; cursor: pointer;}
 
 #ruler {text-align: center; clear: both;}
 #showBooks {clear: both; font-size: 120%; text-align: center; padding: 1em;}
@@ -104,3 +101,9 @@ img.photo {
 #books .done, #books .left {border: 1px black solid; display: inline-block; height: 0.5em;}
 #books .done {background-color: #1240ab; margin-left: 1em; border-radius: 5px 0 0 5px;}
 #books .left {margin-right: 0.5em; border-radius: 0 5px 5px 0;}
+
+#nav {display: inline;}
+@media only screen and (max-width : 1200px) {
+    #nav:before {content: '\A'; white-space: pre;}
+    #header #tagline {margin-top: 1em;}
+}

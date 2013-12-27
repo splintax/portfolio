@@ -11,13 +11,23 @@
 <style type="text/css">
 #header { <?
     $imgs = array('palm', 'stars', 'sunset'); //, 'narrows');
-    $img = $imgs[array_rand($imgs)];
-    echo "background-image: url('/home/images/$img.jpg');";
-    echo "background-position: bottom right;";
-    echo "background-repeat: no-repeat;";
-    echo "background-size: cover;";
-?> }
+    $key = array_rand($imgs);
+    $img = $imgs[$key];
+
+    echo "background-image: url('/home/images/$img.jpg');"; ?>
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 </style>
+<script type="text/javascript">
+window.BG_IMAGES = ["<?
+    // preserve ordering for cycling backgrounds later
+    unset($imgs[$key]);
+    array_push($imgs, $img);
+    echo implode('","', $imgs)
+?>"];
+</script>
 </head>
 
 <body>
@@ -30,7 +40,8 @@
     <li><i class="fa fa-flask"></i><a href="#projects">projects</a></li>
     <li><i class="fa fa-globe"></i><a href="#contact">contact</a></li>
 </ul>
-<p id="tagline">is a programmer from Perth, Western Australia.</p>
+<p id="tagline">is a programmer from Perth, Western Australia</p>
+<i id="refresh" class="fa fa-refresh"></i>
 </div>
 
 <div id="sections">
