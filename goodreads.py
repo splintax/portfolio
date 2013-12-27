@@ -26,7 +26,7 @@ def parseXml(string):
             'title': et.find('.//title').text,
             'author': et.find('.//author/name').text,
             'image': et.find('.//book//image_url').text,
-            'link': et.find('.//book//link').text,
+            'link': et.find('.//review/link').text,
         }
         if et.find('.//rating').text != "0":
             # if book finished
@@ -67,14 +67,14 @@ def update():
     }))
     results['current'] = parseXml(apiCall('review/show', {'id': j[0]['id']}))
 
-    # obtain 5 most recent reviews
+    # obtain 3 most recent reviews
     j = json.loads(apiCall('review/list', {
         'format':   'json',
         'id':       '6901419',
         'shelf':    'read',
         'sort':     'date_read',
         'page':     1,
-        'per_page': 5,
+        'per_page': 3,
     }))
     results['recent'] = [parseXml(apiCall('review/show', {'id': review['id']})) for review in j]
 
