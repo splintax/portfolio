@@ -56,9 +56,9 @@ window.BG_IMAGES = ["<?
         Australia</a>. I completed bachelor's degrees in law and 
         pure mathematics at <a href="http://uwa.edu.au">UWA</a> and
         have worked as a law clerk and programmer.</p>
-        <div id="showBooks"><a href="#">Want to see what I've been reading lately?</a></div>
+
         <div id="books">
-        <? $json = json_decode(exec('/usr/bin/python goodreads.py'));
+        <?  $json = json_decode(exec('/usr/bin/python goodreads.py'));
             $imageToggle = false;
             $paintBook = function($book, $type) use (&$imageToggle) { /*
                 <img src="<?= $book->image.($imageToggle ? '" class="alt' : '') ?>">

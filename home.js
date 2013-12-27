@@ -82,13 +82,6 @@ $(document).ready(function() {
         animToggle = true;
     });
 
-    // toggle visibility of the goodreads part
-    $('#books').hide();
-    $('#showBooks').click(function(event) {
-        event.preventDefault();
-        $(this).add('#books').slideToggle();
-    });
-
     // load subpage when loaded from query string
     var clickedLink = $('a[href="' + window.location.hash + '"]');
     if (clickedLink.length === 1)

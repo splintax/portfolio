@@ -89,7 +89,6 @@ img.photo {
 #header #refresh.fa {position: absolute; bottom: 1em; right: 1em; cursor: pointer;}
 
 #ruler {text-align: center; clear: both;}
-#showBooks {clear: both; font-size: 120%; text-align: center; padding: 1em;}
 #books {clear: both;}
 #books h3 {margin-bottom: -1em; padding-top: 1em;}
 #books .book + h3 {padding-top: 2em;}
