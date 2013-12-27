@@ -35,24 +35,72 @@
 
 <div id="sections">
     <div id="about">
-        <img src="images/perth-small.jpg">
-        <p>I'm <strong>S</strong>cott <strong>J.</strong>
-        <strong>Y</strong>oung and <tt><strong>sjy</strong>.id.au</tt> is
-        my part of the Internet.</p> <p>I
-        <?
+        <img src="images/perth-small.jpg" class="photo">
+        <p>I'm Scott and <tt>sjy.id.au</tt> is my part of the Internet.</p>
+        <p>I <?
             echo 'am '; $now = new DateTime();
             echo $now->diff(new DateTime('1990-08-28'))->y;
             echo ' years old and';
-        ?>
-        live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
-        Australia</a>. I have bachelor's degrees in law and 
-        pure mathematics (<a href="http://uwa.edu.au"><em>W.Aust.</em></a>) and
+        ?> live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
+        Australia</a>. I completed bachelor's degrees in law and 
+        pure mathematics at <a href="http://uwa.edu.au">UWA</a> and
         have worked as a law clerk and programmer.</p>
-        <p>I'm a member of the <a href="http://ucc.asn.au">University Computer Club</a>.</p>
+        <div id="showBooks"><a href="#">Want to see what I've been reading lately?</a></div>
+        <div id="books">
+        <? $json = json_decode(exec('/usr/bin/python goodreads.py'));
+            $imageToggle = false;
+            $paintBook = function($book, $type) use (&$imageToggle) { /*
+                <img src="<?= $book->image.($imageToggle ? '" class="alt' : '') ?>">
+                <? */ $imageToggle = !$imageToggle; ?>
+                <p> <? // title ?>
+                    <a href="<?= $book->link ?>">
+                        <?= $book->title ?></a>
+                </p><? // author ?>
+                <p><span class="author"><?= $book->author ?></span><?
+                if ($type === 'current') {
+                    ?><span class="rating"><?
+                        if ($book->percent)
+                            $pct = $book->percent;
+                        else
+                            $pct = $book->pages_done / $book->pages_total * 100;
+                        
+                        echo '<span class="done" style="width: ';
+                        echo $pct/25; echo 'em"></span>';
+                        echo '<span class="left" style="width: ';
+                        echo 4 - $pct/25; echo 'em"></span>';
+                        echo '('.$pct.'%)';
+                    ?></span><span class="finished">last read on <?
+                        $date = new DateTime($book->last_updated);
+                        echo $date->format('d M Y');
+                    ?></span><?
+                } else if ($type === 'recent') { ?>
+                    <span class="rating"><?
+                        for ($i=0; $i<$book->rating; $i++) echo '<i class="fa fa-star"></i>';
+                        for ($i=$book->rating; $i<5; $i++) echo '<i class="fa fa-star-o"></i>';
+                    ?></span><span class="finished">finished on <?
+                        $date = new DateTime($book->read_at);
+                        echo $date->format('d M Y');
+                    ?></span><?
+                } ?>
+                </p><?
+            }
+        ?>
+        <h3>I'm currently reading...</h3>
+        <div class="book">
+        <? $paintBook($json->current, 'current') ?>
+        </div>
+
+        <h3>I recently finished...</h3>
+        <? foreach ($json->recent as $book) { ?>
+        <div class="book">
+        <? $paintBook($book, 'recent') ?>
+        </div>
+        <? } ?>
+        </div>
     </div>
 
     <div id="projects">
-        <div class="half"><h3>computer programming</h3><dl>
+        <div class="half"><h3>programming</h3><dl>
             <dt><a href="http://uwa.edu.au/contact/map">Campus Map</a> (2013)</dt>
             <dd>Interactive map combining data from Google Maps with a searchable,
             locally-maintained database of geographical features. Significantly faster
@@ -66,7 +114,7 @@
             Maintained during active use since June 2012.</dd>
             <dd><strong>Tools</strong>: Python, HTML/CSS/JavaScript, Django, nginx</dd>
         </dl></div>
-        <div class="half"><h3>legal writing</h3><dl>
+        <div class="half"><h3>law</h3><dl>
             <dt>Federalism &amp; Treaty Interpretation</a> (2013)</dt>
             <dd>Dissertation completed for the requirements of <a
             href="http://units.handbooks.uwa.edu.au/units/laws/laws3347">LAWS3347</a>
@@ -75,8 +123,8 @@
             federalism, external affairs power, necessary and proper clause</dd>
 
             <dt><a href="mooting-submissions.pdf">Mooting Submissions</a> (2013)</dt>
-            <dd>Written component of the 5<sup>th</sup> and final round of UWA's
-            open mooting competition, which I was the overall winner of.</dd>
+            <dd>Written component of the grand final of UWA's
+            open mooting competition.</dd>
             <dd><strong>Topics</strong>: environmental law, administrative law,
             statutory construction, improper exercise of power, unreasonableness</dd>
         </dl></div>

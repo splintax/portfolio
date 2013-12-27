@@ -28,15 +28,13 @@ body div {overflow: hidden;}
 #sections p {margin: 0.5em 0;}
 #sections p + p {text-indent: 1em;}
 .fa {text-indent: 0;}
-#sections img {
+img.photo {
     float: right;
     max-width: 50%;
-    margin: 0 -1em 0 0.5em;
+    margin: 0 0.5em;
 }
-#sections .half {
-    float: left;
-    width: 50%;
-}
+.half {float: left; width: 50%;}
+.third {float: left; width: 33%;}
 #sections dd {
     font-size: 80%;
     margin-bottom: 0.5em;
@@ -93,4 +91,16 @@ body div {overflow: hidden;}
 
 .fa {font-size: 70%;}
 
-#ruler {text-align: center;}
+#ruler {text-align: center; clear: both;}
+#showBooks {clear: both; font-size: 120%; text-align: center; padding: 1em;}
+#books {clear: both;}
+#books h3 {margin-bottom: -1em; padding-top: 1em;}
+#books .book + h3 {padding-top: 2em;}
+#books .book {padding-top: 0.5em; margin-top: 0.5em; min-height: 4em; overflow: auto; text-align: center;}
+#books .book + .book {border-top: 1px #ccc dotted;}
+#sections #books p {text-indent: 0;}
+#books .rating {font-size: 100%; margin: 0 1em;}
+#books .finished {font-size: 80%;}
+#books .done, #books .left {border: 1px black solid; display: inline-block; height: 0.5em;}
+#books .done {background-color: #1240ab; margin-left: 1em; border-radius: 5px 0 0 5px;}
+#books .left {margin-right: 0.5em; border-radius: 0 5px 5px 0;}

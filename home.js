@@ -81,6 +81,13 @@ $(document).ready(function() {
         animToggle = true;
     });
 
+    // toggle visibility of the goodreads part
+    $('#books').hide();
+    $('#showBooks').click(function(event) {
+        event.preventDefault();
+        $(this).add('#books').slideToggle();
+    });
+
     // load subpage when loaded from query string
     var clickedLink = $('a[href="' + window.location.hash + '"]');
     if (clickedLink.length === 1)
@@ -89,11 +96,7 @@ $(document).ready(function() {
         showDefaultView()
 
     // external link icons
-    $('a[href^="http"]').after(' <i class="fa fa-external-link"></i>');
+    // $('a[href^="http"]').after(' <i class="fa fa-external-link"></i>');
     $('a[href$="pdf"]').after(' <i class="fa fa-file-o"></i>');
-
-    var loadGoodreadsData = function() {
-        
-    }
 
 });
