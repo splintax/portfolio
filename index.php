@@ -6,8 +6,8 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <link href='//fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
-<link href="home.css" rel="stylesheet">
-<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="/home/home.css" rel="stylesheet">
+<link href="/home/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <style type="text/css">
 #header { <?
     $imgs = array('palm', 'stars', 'sunset'); //, 'narrows');
@@ -46,7 +46,7 @@ window.BG_IMAGES = ["<?
 
 <div id="sections">
     <div id="about">
-        <img src="images/perth-small.jpg" class="photo">
+        <img src="/home/images/perth-small.jpg" class="photo">
         <p>I'm Scott and <tt>sjy.id.au</tt> is my part of the Internet.</p>
         <p>I <?
             echo 'am '; $now = new DateTime();
@@ -152,9 +152,9 @@ window.BG_IMAGES = ["<?
     </div>
 </div>
 
-<div id="ruler"><img src="images/ruler.svg"></div>
+<div id="ruler"><img src="/home/images/ruler.svg"></div>
 
-<script type="text/javascript" src="home.js"></script>
+<script type="text/javascript" src="/home/home.js"></script>
 
 </body>
 </html>

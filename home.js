@@ -71,6 +71,7 @@ $(document).ready(function() {
         $('#sections, #ruler').show();
         $('#tagline').hide();
 
+        // slide up
         $('#header').animate({height: '30%'}, animToggle*800);
         $('#spacer').animate({height: '40%'}, animToggle*800)
 
