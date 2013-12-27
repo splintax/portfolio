@@ -93,16 +93,18 @@ $(document).ready(function() {
     // $('a[href^="http"]').after(' <i class="fa fa-external-link"></i>');
     $('a[href$="pdf"]').after(' <i class="fa fa-file-o"></i>');
 
-    $('#refresh').click(function() {
+    var cycleBackgrounds = function() {
         $('#header').css({opacity: 0});
 
         // swap image
         var img = window.BG_IMAGES.shift();
-        var url = 'url("http://sjy.id.au/home/images/' + img + '.jpg")';
+        var url = 'url("http://sjy.id.au/home/backgrounds/' + img.name + '.jpg")';
         $('#header').css('backgroundImage', url);
+        $('#caption').html(img.desc + ' — ' + img.date);
         window.BG_IMAGES.push(img);
 
         $('#header').animate({opacity: 1}, 500);
-    });
+    }
+    $('#refresh').click(cycleBackgrounds);
 
 });

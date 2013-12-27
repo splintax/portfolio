@@ -78,6 +78,21 @@ img.photo {
     list-style-type: none;
     text-shadow: 4px 4px 4px black;
 }
+#header #caption {
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    font-family: 'Georgia', sans-serif;
+    font-weight: normal;
+    font-size: 12pt;
+    z-index: 3;
+}
+#header #refresh {
+    position: absolute; bottom: 1em; right: 1em;
+    cursor: pointer;
+    z-index: 4;
+}
 
 #sections #contact {font-size: 20pt; text-align: center;}
 #sections #contact .fa {font-size: 100%; margin-right: 0.5em;}
@@ -86,7 +101,6 @@ img.photo {
 
 .fa {text-indent: 0; font-size: 70%;}
 #nav .fa {margin-right: 0.5em;}
-#header #refresh.fa {position: absolute; bottom: 1em; right: 1em; cursor: pointer;}
 
 #ruler {text-align: center; clear: both;}
 #books {clear: both;}
