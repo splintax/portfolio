@@ -46,8 +46,8 @@ window.BG_IMAGES = ["<?
 
 <div id="sections">
     <div id="about">
-        <img src="/home/images/perth-small.jpg" class="photo">
-        <p>I'm Scott and <tt>sjy.id.au</tt> is my part of the Internet.</p>
+        <img src="/home/images/perth-small.jpg" class="photo" alt="perth's skyline">
+        <p>I'm Scott and <code>sjy.id.au</code> is my part of the Internet.</p>
         <p>I <?
             echo 'am '; $now = new DateTime();
             echo $now->diff(new DateTime('1990-08-28'))->y;
@@ -94,21 +94,21 @@ window.BG_IMAGES = ["<?
                     ?></span><?
                 } ?>
                 </p><?
-            }
+            } // end paintBook()
         ?>
         <h3>I'm currently reading...</h3>
         <div class="book">
         <? $paintBook($json->current, 'current') ?>
-        </div>
+        </div><!-- end .book -->
 
         <h3>I recently finished...</h3>
         <? foreach ($json->recent as $book) { ?>
         <div class="book">
         <? $paintBook($book, 'recent') ?>
-        </div>
+        </div><!-- end .book -->
         <? } ?>
-        </div>
-    </div>
+        </div><!-- end #books -->
+    </div><!-- end #about -->
 
     <div id="projects">
         <div class="half"><h3>programming</h3><dl>
@@ -126,7 +126,7 @@ window.BG_IMAGES = ["<?
             <dd><strong>Tools</strong>: Python, HTML/CSS/JavaScript, Django, nginx</dd>
         </dl></div>
         <div class="half"><h3>law</h3><dl>
-            <dt>Federalism &amp; Treaty Interpretation</a> (2013)</dt>
+            <dt>Federalism &amp; Treaty Interpretation (2013)</dt>
             <dd>Dissertation completed for the requirements of <a
             href="http://units.handbooks.uwa.edu.au/units/laws/laws3347">LAWS3347</a>
             (Supervised Research I). Received a grade of 80 (high distinction).</dd>
@@ -139,7 +139,7 @@ window.BG_IMAGES = ["<?
             <dd><strong>Topics</strong>: environmental law, administrative law,
             statutory construction, improper exercise of power, unreasonableness</dd>
         </dl></div>
-    </div>
+    </div><!-- end #projects -->
 
     <div id="contact">
     <ul>
@@ -149,10 +149,12 @@ window.BG_IMAGES = ["<?
         <li><i class="fa fa-github"></i>    <a href="https://github.com/splintax">splintax</a></li>
         <li><i class="fa fa-instagram"></i>     <a href="https://instagram.com/splintax">splintax</a></li>
         <li><i class="fa fa-stack-exchange"></i>    <a href="http://stackexchange.com/users/1497308/sjy">sjy</a></li>
-    </div>
-</div>
+    </ul>
+    </div><!-- end #contact -->
 
-<div id="ruler"><img src="/home/images/ruler.svg"></div>
+</div><!-- end #sections -->
+
+<div id="ruler"><img src="/home/images/ruler.svg" alt="space-filling curve"></div>
 
 <script type="text/javascript" src="/home/home.js"></script>
 
