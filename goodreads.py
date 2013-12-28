@@ -1,100 +1,139 @@
 #!/usr/bin/python
 
+import datetime
 import json
 import os
 import requests
-import sys
-import time
+import string
 from xml.etree import ElementTree
 
-def debug(string):
-    pass
-    # print string
+bookTemplate = string.Template("""
+    <div class="book"><p>
+        <a href="${link}">${title}</a>
+    </p><p>
+        <span class="author">${author}</span>
+        ${extras}
+    </p></div><!-- end .book -->
+""")
+
+currentExtrasTemplate = string.Template("""
+    <span class="rating">
+        <span class="done" style="width: ${done}em"></span><span class="left" style="width: ${left}em"></span>
+        (${percent}%)
+    </span>
+    <span class="finished">last read on ${last_read}</span>
+""")
+# Do the percent and proportion of 4em calculations here.
+def currentExtras(et):
+    try:
+        percent = float(et.find('.//user_status[1]/percent').text)
+    except AttributeError:
+        # percentage not provided, so calculate it
+        pages_total = float(et.find('.//book/num_pages').text)
+        pages_done = float(et.find('.//user_status[1]/page').text)
+        percent = pages_total / pages_done * 100
+    def cleanDate(string):
+        date = string.split('T')[0]
+        return datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d %B %Y')
+    last_read = cleanDate(et.find('.//user_status[1]/updated_at').text)
+    return currentExtrasTemplate.substitute({
+        'last_read': last_read,
+        'percent': percent,
+        'done': (percent/100) * 4,
+        'left': (1 - percent/100) * 4,
+    })
+
+recentExtrasTemplate = string.Template("""
+    <span class="rating">${stars}</span>
+    <span class="finished">finished on ${read_at}</span>
+""")
+# Do the rating and star text processing here.
+def recentExtras(et):
+    rating = int(et.find('.//rating').text)
+    blackStars = '<i class="fa fa-star"></i>'  *   rating
+    whiteStars = '<i class="fa fa-star-o"></i>'* (5-rating)
+    def cleanDate(string):
+        date = string.split(' ') # Tue Dec 17 00:00:00 -0800 2013
+        date = ' '.join([date[2], date[1], date[-1]])
+        return datetime.datetime.strptime(date, '%d %b %Y').strftime('%d %B %Y')
+    read_at = cleanDate(et.find('.//read_at').text)
+    return recentExtrasTemplate.substitute({
+        'read_at': read_at,
+        'stars': blackStars + whiteStars,
+    })
+
+# store API key in memory    
+with open(os.path.expanduser('~splintax/.goodreads-api-key'), 'r') as fd:
+    API_KEY = fd.read()
 
 def apiCall(method, params):
     url = 'https://www.goodreads.com/' + method
-    debug('Firing API method ' + method + '...')
-    with open(os.path.expanduser('~splintax/.goodreads-api-key'), 'r') as fd:
-        params['key'] = fd.read()
+    params.update({'key': API_KEY})
     return requests.get(url, data=params).content
 
-def parseXml(string):
+def transformGoodreadsXml(string):
     try:
         et = ElementTree.fromstring(string)
-        result = {
-            # book details
+        bookWasRated = not(et.find('.//rating').text == '0')
+        if bookWasRated: # recently finished
+            extras = recentExtras(et)
+        else:            # currently reading
+            extras = currentExtras(et)
+        return bookTemplate.substitute({
             'title': et.find('.//title').text,
             'author': et.find('.//author/name').text,
-            'image': et.find('.//book//image_url').text,
             'link': et.find('.//review/link').text,
-        }
-        if et.find('.//rating').text != "0":
-            # if book finished
-            result.update({
-                'read_at': et.find('.//read_at').text,
-                'rating': et.find('.//rating').text,
-                # 'body': et.find('.//review/body').text,
-            })
-        else:
-            # if book in progress
-                result.update({
-                    'pages_total': et.find('.//book/num_pages').text,
-                    'last_updated': et.find('.//user_status[1]/updated_at').text,
-                    'pages_done': et.find('.//user_status[1]/page').text,
-                    'percent': et.find('.//user_status[1]/percent').text,
-                })
-        return result
+            'extras': extras,
+        })
     except:
-        debug('An error occurred when parsing this XML:')
-        debug(string)
+        print 'An error occurred when parsing this XML:'
+        print string
         raise
 
-# when cache out of date
-def update():
-    results = {
-        'recent': [],
-        'current': None,
-    }
-        
-    # obtain 1 most recent currently-readinng
-    j = json.loads(apiCall('review/list', {
+def getCurrentBooks():
+    print "Listing currently-reading shelf..."
+    html = ''
+    response = apiCall('review/list', {
         'format':   'json',
-        'id':       '6901419',
-        'shelf':    'currently_reading',
+        'id':       '6901419', # Scott Young
+        'shelf':    'currently-reading',
         # 'sort':     'date_updated',
-        'page':     1,
-        'per_page': 3,
-    }))
-    results['current'] = parseXml(apiCall('review/show', {'id': j[0]['id']}))
+        # doesn't seem to update when the status changes, only when the
+        # review itself is edited.
+        'per_page': 1,
+    })
+    for review in json.loads(response):
+        print 'Fetching review {0}...'.format(review['id'])
+        reviewXml = apiCall('review/show', {'id': review['id']})
+        html += transformGoodreadsXml(reviewXml)
+    return html
 
-    # obtain 3 most recent reviews
-    j = json.loads(apiCall('review/list', {
+def getRecentBooks():
+    print "Listing read shelf..."
+    html =''
+    response = apiCall('review/list', {
         'format':   'json',
-        'id':       '6901419',
+        'id':       '6901419', # Scott Young
         'shelf':    'read',
         'sort':     'date_read',
-        'page':     1,
         'per_page': 3,
-    }))
-    results['recent'] = [parseXml(apiCall('review/show', {'id': review['id']})) for review in j]
+    })
+    for review in json.loads(response):
+        print 'Fetching review {0}...'.format(review['id'])
+        reviewXml = apiCall('review/show', {'id': review['id']})
+        html += transformGoodreadsXml(reviewXml)
+    return html
 
-    with open('goodreads.json', 'w') as fd:
-        json.dump(results, fd)
-        debug('Wrote to goodreads.json.')
-
-if __name__ == '__main__':
-    age = time.time() - os.path.getmtime('goodreads.json') # seconds
-    stale = age / 60 / 60 / 24 > 1 # days
-
-    if (len(sys.argv) == 2 and sys.argv[1] == '--force'):
-        stale = True
-        def debug(s): print s
-
-    debug('Cached goodreads.json is {0} minutes old.'.format(age / 60))
-    if stale:
-        debug('Refreshing cache...')
-        update()
-    else:
-        debug('Reading from cache...')
-        with open('goodreads.json', 'r') as fd:
-            print fd.read()
+mainTemplate = string.Template("""
+    <h3>I'm currently reading...</h3>
+    ${currentBooks}
+    <h3>I recently finished...</h3>
+    ${recentBooks}
+""")
+html = mainTemplate.substitute({
+    'currentBooks': getCurrentBooks(),
+    'recentBooks': getRecentBooks(),
+})
+with open('/home/wheel/splintax/public-html/sjy.id.au/home/goodreads.html', 'w') as fd:
+    fd.write(html.encode('utf-8'))
+    print "goodreads.html updated."

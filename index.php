@@ -4,10 +4,10 @@
 <head>
 <title>Scott Young &mdash; Perth, Western Australia</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="/home/lib/jquery.min.js"></script>
 <link href='//fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
 <link href="/home/home.css" rel="stylesheet">
-<link href="/home/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="/home/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <style type="text/css">
 #header { <?
     $BG_IMAGES = [
@@ -74,14 +74,29 @@ window.BG_IMAGES = <?
 
 <div id="sections">
 
-<? include('about.php') ?>
-<? include('projects.php') ?>
+<div id="about">
+    <img src="/home/perth-small.jpg" class="photo" alt="perth's skyline">
+    <p>I'm Scott and <code>sjy.id.au</code> is my part of the Internet.</p>
+    <p>I <?
+        echo 'am '; $now = new DateTime();
+        echo $now->diff(new DateTime('1990-08-28'))->y;
+        echo ' years old and';
+    ?> live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
+    Australia</a>. I completed bachelor's degrees in law and 
+    pure mathematics at <a href="http://uwa.edu.au">UWA</a> and
+    have worked as a law clerk and programmer.</p>
+
+    <div id="books">
+    <? include('goodreads.html'); ?>
+    </div><!-- end #books -->
+</div><!-- end #about -->
+<? include('projects.html') ?>
 
 <div id="contact">
 <ul>
     <li><i class="fa fa-envelope"></i>  <a href="mailto:scott@sjy.id.au">scott@sjy.id.au</a></li>
     <li><i class="fa fa-skype"></i>     scott.j.young</li>
-    <li><i class="fa fa-facebook"></i>  <a href="http://facebook.com/scott.young">scott.young</a></li>
+    <!--<li><i class="fa fa-facebook"></i>  <a href="http://facebook.com/scott.young">scott.young</a></li>-->
     <li><i class="fa fa-github"></i>    <a href="https://github.com/splintax">splintax</a></li>
     <li><i class="fa fa-instagram"></i>     <a href="https://instagram.com/splintax">splintax</a></li>
     <li><i class="fa fa-stack-exchange"></i>    <a href="http://stackexchange.com/users/1497308/sjy">sjy</a></li>
