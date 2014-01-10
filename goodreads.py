@@ -1,4 +1,11 @@
-#!/usr/bin/python
+"""
+Queries the Goodreads API for my currently-reading and read
+bookshelves, and writes formatted HTML output to goodreads.html.
+
+One API call is required per book, and this is quite slow, so
+HTTP requests should never be held up to refresh goodreads.html.
+Instead, this script should be run periodically by cron.
+"""
 
 import datetime
 import json
@@ -19,9 +26,9 @@ bookTemplate = string.Template("""
 currentExtrasTemplate = string.Template("""
     <span class="rating">
         <span class="done" style="width: ${done}em"></span><span class="left" style="width: ${left}em"></span>
-        (${percent}%)
+        <small>${percent}%</small>
     </span>
-    <span class="finished">last read on ${last_read}</span>
+    <small>last read on ${last_read}</small>
 """)
 # Do the percent and proportion of 4em calculations here.
 def currentExtras(et):
@@ -38,14 +45,14 @@ def currentExtras(et):
     last_read = cleanDate(et.find('.//user_status[1]/updated_at').text)
     return currentExtrasTemplate.substitute({
         'last_read': last_read,
-        'percent': percent,
+        'percent': int(percent),
         'done': (percent/100) * 4,
         'left': (1 - percent/100) * 4,
     })
 
 recentExtrasTemplate = string.Template("""
     <span class="rating">${stars}</span>
-    <span class="finished">finished on ${read_at}</span>
+    <small>finished on ${read_at}</small>
 """)
 # Do the rating and star text processing here.
 def recentExtras(et):
@@ -125,9 +132,8 @@ def getRecentBooks():
     return html
 
 mainTemplate = string.Template("""
-    <h3>I'm currently reading...</h3>
+    <h3>What I've been reading lately</h3>
     ${currentBooks}
-    <h3>I recently finished...</h3>
     ${recentBooks}
 """)
 html = mainTemplate.substitute({

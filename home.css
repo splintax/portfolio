@@ -42,12 +42,16 @@ img.photo {
 #sections dd + dt {margin-top: 1em;}
 #header {
     color: white;
+    height: 30%;
     font-family: 'Bitter';
     font-size: 24pt;
     text-shadow: 2px 2px 2px black;
     overflow: hidden;
     position: relative;
     box-shadow: 5px 5px 2px #333;
+}
+#header #spacer {
+    height: 40%;
 }
 #header a {
     color: white;
@@ -110,10 +114,9 @@ img.photo {
 #books .book + .book {border-top: 1px #ccc dotted;}
 #sections #books p {text-indent: 0;}
 #books .rating {font-size: 100%; margin: 0 1em;}
-#books .finished {font-size: 80%;}
 #books .done, #books .left {border: 1px black solid; display: inline-block; height: 0.5em;}
-#books .done {background-color: #1240ab; margin-left: 1em; border-radius: 5px 0 0 5px;}
-#books .left {margin-right: 0.5em; border-radius: 0 5px 5px 0;}
+#books .done {background-color: #1240ab; border-radius: 5px 0 0 5px;}
+#books .left {border-radius: 0 5px 5px 0;}
 
 #nav {display: inline;}
 @media only screen and (max-width : 1200px) {
