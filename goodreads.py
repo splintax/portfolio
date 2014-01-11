@@ -41,7 +41,7 @@ def currentExtras(et):
         percent = pages_total / pages_done * 100
     def cleanDate(string):
         date = string.split('T')[0]
-        return datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d %B %Y')
+        return datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d %B %Y').lstrip('0')
     last_read = cleanDate(et.find('.//user_status[1]/updated_at').text)
     return currentExtrasTemplate.substitute({
         'last_read': last_read,
@@ -62,7 +62,7 @@ def recentExtras(et):
     def cleanDate(string):
         date = string.split(' ') # Tue Dec 17 00:00:00 -0800 2013
         date = ' '.join([date[2], date[1], date[-1]])
-        return datetime.datetime.strptime(date, '%d %b %Y').strftime('%d %B %Y')
+        return datetime.datetime.strptime(date, '%d %b %Y').strftime('%d %B %Y').lstrip('0')
     read_at = cleanDate(et.find('.//read_at').text)
     return recentExtrasTemplate.substitute({
         'read_at': read_at,
