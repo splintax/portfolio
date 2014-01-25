@@ -82,9 +82,9 @@ window.BG_IMAGES = <?
         echo $now->diff(new DateTime('1990-08-28'))->y;
         echo ' years old and';
     ?> live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
-    Australia</a>. I completed bachelor's degrees in law and 
-    pure mathematics at <a href="http://uwa.edu.au">UWA</a> and
-    have worked as a law clerk and programmer.</p>
+    Australia</a>. I studied law and pure mathematics at <a
+    href="http://uwa.edu.au">UWA</a> and currently work as a programmer at
+    <a href="http://ii.net">iiNet</a>.</p>
 
     <div id="books">
     <? include('goodreads.html'); ?>
