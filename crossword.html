@@ -1,0 +1,47 @@
+<div id="crossword" ng-controller="CrosswordCtrl" ng-app="cryptical">
+
+<div id="leftcol">
+
+    <table><tbody>
+        <tr ng-repeat="row in crossword.cells">
+            <td ng-repeat="cell in row", ng-class="cell.class", ng-click="!crossword.toggleCells || cell.toggle()">
+                <span class="num" ng-if="cell.num">{{cell.num}}</span>
+                <input ng-model="cell.char" oneCharOnly ng-change="cell.clean()">
+            </td>
+        </tr>
+    </tbody></table>
+
+</div>
+
+<div id="rightcol">
+
+    <h4>Clues</h4>
+    <div ng-repeat="(direction, list) in crossword.clues" ng-class="direction">
+        <h5>{{direction}}</h5>
+        <ol>
+            <li ng-repeat="clue in list | sortObjectKeys" value="{{clue.num}}" ng-switch on="crossword.editable">
+                <input ng-model="clue.content">
+                <span class="length">({{clue.length}})</span>
+            </li>
+        </ol>
+    </div>
+
+    <h4>Local storage</h4>
+    <button ng-click="load_local()">Load</button>
+    <button ng-click="save_local()">Save</button>
+
+    <h4>Edit</h4>
+    <button ng-click="crossword.toggleCells = !crossword.toggleCells">
+        Toggle black cell toggling
+    </button>
+
+    <h4>New</h4>
+    <button ng-click="load(crossword.random())">Random crossword</button>
+
+</div>
+
+</div><!-- end #crossword -->
+
+<link rel="stylesheet" href="cryptical/crossword.css">
+<script src="lib/angular.min.js"></script>
+<script src="cryptical/cryptical.js"></script>

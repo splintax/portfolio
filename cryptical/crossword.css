@@ -1,0 +1,65 @@
+h1 {
+  text-align: center;
+}
+#leftcol {
+  width: 70%;
+  min-width: 10em;
+  float: left;
+}
+#rightcol {
+  width: 30%;
+  min-width: 10em;
+  float: left;
+}
+#leftcol table {
+  margin: 1em auto;
+}
+#leftcol table td {
+  position: relative;
+/* to contain .num */
+  width: 40px;
+  height: 40px;
+  border: 2px #000 solid;
+  text-align: center;
+}
+#leftcol table td input {
+  width: 1em;
+  text-align: center;
+  border: 0px;
+  font-size: 150%;
+}
+#leftcol table .black input {
+  display: none;
+}
+#leftcol table td.error {
+  padding: 1em;
+  width: 500px;
+}
+#leftcol table .num {
+  font-size: 80%;
+  position: absolute;
+  top: -2px;
+  left: 2px;
+}
+#leftcol table .black {
+  background: #000;
+}
+#leftcol table .toggleCells td {
+  cursor: pointer;
+}
+#rightcol h4 {
+  text-align: center;
+}
+#rightcol .clues h5 {
+  text-align: center;
+}
+#rightcol .clues .text {
+  min-width: 5em;
+}
+#rightcol .buttons {
+  text-align: center;
+}
+#rightcol .buttons .dimensions input {
+  margin: 1em 0.5em;
+  width: 2em;
+}

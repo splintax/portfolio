@@ -65,6 +65,7 @@ window.BG_IMAGES = <?
     <ul id="nav">
         <li><i class="fa fa-info"></i><a href="#about">about</a></li>
         <li><i class="fa fa-flask"></i><a href="#projects">projects</a></li>
+        <li><i class="fa fa-flask"></i><a href="#crossword">crossword</a></li>
         <li><i class="fa fa-globe"></i><a href="#contact">contact</a></li>
     </ul>
     <p id="tagline">Perth, Western Australia</p>
@@ -90,7 +91,9 @@ window.BG_IMAGES = <?
     <? include('goodreads.html'); ?>
     </div><!-- end #books -->
 </div><!-- end #about -->
+
 <? include('projects.html') ?>
+<? include('crossword.html') ?>
 
 <div id="contact">
 <ul>
