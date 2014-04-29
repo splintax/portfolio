@@ -18,7 +18,7 @@ $(document).ready(function() {
         .children().css(dir, '1000px')
         .each(function(i, el) {
             $(el).css('position', 'relative')
-                .delay(i*50).animate(dirDict, 500, 'easeOutBack');
+                .delay(i*50).velocity(dirDict, 500, 'easeOutBack');
         });
 
     // default view: sections hidden, heading at the bottom of the page
@@ -36,8 +36,8 @@ $(document).ready(function() {
         $('#tagline').fadeIn();
 
         // slide down
-        $('#header').animate({height: '100%'}, animToggle*800);
-        $('#spacer').animate({height: '60%'}, animToggle*800);
+        $('#header').velocity({height: '100%'}, animToggle*800);
+        $('#spacer').velocity({height: '60%'}, animToggle*800);
 
         // always animate after the first time
         animToggle = true;
@@ -72,8 +72,8 @@ $(document).ready(function() {
         $('#tagline').hide();
 
         // slide up
-        $('#header').animate({height: '30%'}, animToggle*800);
-        $('#spacer').animate({height: '40%'}, animToggle*800)
+        $('#header').velocity({height: '30%'}, animToggle*800);
+        $('#spacer').velocity({height: '40%'}, animToggle*800)
 
         var target = $(this).target();
         $(this).target().fadeIn().siblings().hide();
@@ -103,7 +103,7 @@ $(document).ready(function() {
         $('#caption').html(img.desc + ' — ' + img.date);
         window.BG_IMAGES.push(img);
 
-        $('#header').animate({opacity: 1}, 500);
+        $('#header').velocity({opacity: 1}, 500);
     }
     $('#refresh').click(cycleBackgrounds);
 
