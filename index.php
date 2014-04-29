@@ -5,6 +5,7 @@
 <title>Scott Young &mdash; Perth, Western Australia</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="/home/lib/jquery.min.js"></script>
+<link rel="openid.server" href="https://secure.ucc.asn.au/openid/" />
 <link href='//fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
 <link href="/home/home.css" rel="stylesheet">
 <link href="/home/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
