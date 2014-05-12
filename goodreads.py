@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Queries the Goodreads API for my currently-reading and read
 bookshelves, and writes formatted HTML output to goodreads.html.
@@ -14,6 +15,12 @@ import requests
 import string
 from xml.etree import ElementTree
 
+mainTemplate = string.Template("""
+    <h3>What I've been reading lately</h3>
+    ${currentBooks}
+    ${completedBooks}
+""")
+
 bookTemplate = string.Template("""
     <div class="book"><p>
         <a href="${link}">${title}</a>
@@ -28,20 +35,36 @@ currentExtrasTemplate = string.Template("""
         <span class="done" style="width: ${done}em"></span><span class="left" style="width: ${left}em"></span>
         <small>${percent}%</small>
     </span>
-    <small>last read on ${last_read}</small>
+    <small>updated on ${last_read}</small>
 """)
-# Do the percent and proportion of 4em calculations here.
+
+completedExtrasTemplate = string.Template("""
+    <span class="rating">${stars}</span>
+    <small>finished on ${read_at}</small>
+""")
+
+with open(os.path.expanduser('~splintax/.goodreads-api-key'), 'r') as fd:
+    API_KEY = fd.read()
+
+def cleanDate(string):
+    if ' ' not in string:
+        # 2014-04-29T02:10:47+00:00
+        string = string.split('T')[0]
+        date = datetime.datetime.strptime(string, '%Y-%m-%d')
+    else:
+        # Tue Dec 17 00:00:00 -0800 2013
+        date = datetime.datetime.strptime(string, '%a %b %d %H:%M:%S %z %Y')
+    return date.strftime('%d %B %Y').lstrip('0')
+
+# Current books have a progress indicator.
 def currentExtras(et):
     try:
         percent = float(et.find('.//user_status[1]/percent').text)
     except AttributeError:
         # percentage not provided, so calculate it
-        pages_total = float(et.find('.//book/num_pages').text)
+        pages_total = float(et.find('.//num_pages').text)
         pages_done = float(et.find('.//user_status[1]/page').text)
         percent = pages_total / pages_done * 100
-    def cleanDate(string):
-        date = string.split('T')[0]
-        return datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d %B %Y').lstrip('0')
     last_read = cleanDate(et.find('.//user_status[1]/updated_at').text)
     return currentExtrasTemplate.substitute({
         'last_read': last_read,
@@ -50,96 +73,65 @@ def currentExtras(et):
         'left': (1 - percent/100) * 4,
     })
 
-recentExtrasTemplate = string.Template("""
-    <span class="rating">${stars}</span>
-    <small>finished on ${read_at}</small>
-""")
-# Do the rating and star text processing here.
-def recentExtras(et):
+# Completed books have a rating.
+def completedExtras(et):
     rating = int(et.find('.//rating').text)
     blackStars = '<i class="fa fa-star"></i>'  *   rating
     whiteStars = '<i class="fa fa-star-o"></i>'* (5-rating)
-    def cleanDate(string):
-        date = string.split(' ') # Tue Dec 17 00:00:00 -0800 2013
-        date = ' '.join([date[2], date[1], date[-1]])
-        return datetime.datetime.strptime(date, '%d %b %Y').strftime('%d %B %Y').lstrip('0')
     read_at = cleanDate(et.find('.//read_at').text)
-    return recentExtrasTemplate.substitute({
+    return completedExtrasTemplate.substitute({
         'read_at': read_at,
         'stars': blackStars + whiteStars,
     })
 
-# store API key in memory    
-with open(os.path.expanduser('~splintax/.goodreads-api-key'), 'r') as fd:
-    API_KEY = fd.read()
-
 def apiCall(method, params):
     url = 'https://www.goodreads.com/' + method
-    params.update({'key': API_KEY})
-    return requests.get(url, data=params).content
+    params.update({'key':  API_KEY})
+    response = requests.get(url, data=params).content
+    return response
 
-def transformGoodreadsXml(string):
+def parseXml(string):
     try:
-        et = ElementTree.fromstring(string)
-        bookWasRated = not(et.find('.//rating').text == '0')
-        if bookWasRated: # recently finished
-            extras = recentExtras(et)
-        else:            # currently reading
-            extras = currentExtras(et)
-        return bookTemplate.substitute({
-            'title': et.find('.//title').text,
-            'author': et.find('.//author/name').text,
-            'link': et.find('.//review/link').text,
-            'extras': extras,
-        })
+        return ElementTree.fromstring(string)
     except:
-        print 'An error occurred when parsing this XML:'
-        print string
+        print('An error occurred when parsing this XML:\n{}'.format(string))
         raise
 
-def getCurrentBooks():
-    print "Listing currently-reading shelf..."
+def parseBook(string, shelf):
+    et = parseXml(string)
+    title = et.find('.//title').text
+    print("Parsing '{}'.".format(title))
+    if shelf   == 'currently-reading': extras = currentExtras(et)
+    elif shelf == 'read':              extras = completedExtras(et)
+    else: raise Exception(shelf)
+    return bookTemplate.substitute({
+        'title': title,
+        'author': et.find('.//author/name').text,
+        'link': et.find('.//review/link').text,
+        'extras': extras,
+    })
+
+def getBooks(shelf, count):
+    print("Listing shelf '{}'.".format(shelf))
+    response = apiCall('review/list', {
+        'v':        2,
+        'id':       6901419, # Scott Young
+        'shelf':    shelf,
+        'per_page': count,
+    })
+    et = parseXml(response)
+    review_ids = [el.text for el in et.findall('.//review/id')]
     html = ''
-    response = apiCall('review/list', {
-        'format':   'json',
-        'id':       '6901419', # Scott Young
-        'shelf':    'currently-reading',
-        # 'sort':     'date_updated',
-        # doesn't seem to update when the status changes, only when the
-        # review itself is edited.
-        'per_page': 1,
-    })
-    for review in json.loads(response):
-        print 'Fetching review {0}...'.format(review['id'])
-        reviewXml = apiCall('review/show', {'id': review['id']})
-        html += transformGoodreadsXml(reviewXml)
+    for i in review_ids:
+        response = apiCall('review/show.xml', {'id': i})
+        html += parseBook(response, shelf)
     return html
 
-def getRecentBooks():
-    print "Listing read shelf..."
-    html =''
-    response = apiCall('review/list', {
-        'format':   'json',
-        'id':       '6901419', # Scott Young
-        'shelf':    'read',
-        'sort':     'date_read',
-        'per_page': 3,
-    })
-    for review in json.loads(response):
-        print 'Fetching review {0}...'.format(review['id'])
-        reviewXml = apiCall('review/show', {'id': review['id']})
-        html += transformGoodreadsXml(reviewXml)
-    return html
-
-mainTemplate = string.Template("""
-    <h3>What I've been reading lately</h3>
-    ${currentBooks}
-    ${recentBooks}
-""")
 html = mainTemplate.substitute({
-    'currentBooks': getCurrentBooks(),
-    'recentBooks': getRecentBooks(),
+    'currentBooks': getBooks('currently-reading', 2),
+    'completedBooks': getBooks('read', 3),
 })
+
 with open('/home/wheel/splintax/public-html/sjy.id.au/home/goodreads.html', 'w') as fd:
-    fd.write(html.encode('utf-8'))
-    print "goodreads.html updated."
+    fd.write(html)
+    print("goodreads.html updated.")

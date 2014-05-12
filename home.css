@@ -43,12 +43,15 @@ img.photo {
 #header {
     color: white;
     height: 30%;
+    min-height: 300px;
     font-family: 'Bitter';
     font-size: 24pt;
     text-shadow: 2px 2px 2px black;
     overflow: hidden;
     position: relative;
     box-shadow: 5px 5px 2px #333;
+    background-position: center right;
+    background-size: cover;
 }
 #header #spacer {
     height: 40%;
@@ -92,10 +95,15 @@ img.photo {
     font-size: 12pt;
     z-index: 3;
 }
-#header #refresh {
-    position: absolute; bottom: 1em; right: 1em;
+#header #refresh, #header #expand {
+    position: absolute;
+    bottom: 1em; right: 1em;
+    height: 1em;
     cursor: pointer;
     z-index: 4;
+}
+#header #refresh {
+    top: 1em;
 }
 
 #sections #contact {font-size: 20pt; text-align: center;}

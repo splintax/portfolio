@@ -4,8 +4,7 @@ $(document).ready(function() {
         return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
     };
 
-    // one-off DOM manipulation (wrapping individual letters in <span>);
-    // allows letter-by-letter animation
+    // wrap individual letters in <span> for letterwise animation
     var dir = 'top';
     if (window.location.hash.length > 1)
         dir = 'bottom'; // flip animation if we're already on sub-page
@@ -22,17 +21,14 @@ $(document).ready(function() {
         });
 
     // default view: sections hidden, heading at the bottom of the page
-
-    // skip some animations if
-    // the user is loading the homepage directly
     var animToggle = false; // don't animate by default
-    var showDefaultView = function() {
-        // add classes
+    var showBigPic = function() {
         $('h1').addClass('active');
         $('#nav a').removeClass('active')
 
         // toggle content visibility
         $('#sections, #ruler').hide();
+        $('#expand').fadeOut();
         $('#tagline').fadeIn();
 
         // slide down
@@ -42,44 +38,42 @@ $(document).ready(function() {
         // always animate after the first time
         animToggle = true;
     };
-
-    $('h1').click(function() {
-        if ($(this).hasClass('active')) {
-            $('a[href="#about"]').click();
-        } else {
-            window.location.hash = '';
-            showDefaultView();
-        }
-    });
-
-    // helpful jquery extension for <a href="foo">
-    $.fn.target = function() {
-        return $(this.attr('href'));
-    }
-
-    // content view: one section expanded
-    $('#nav a[href^="#"]').click(function(event) {
-        // handle link-clicking
-        event.preventDefault();
-        window.location.hash = $(this).attr('href');
-
-        // add classes
-        $('#nav a, h1').removeClass('active');
-        $(this).addClass('active');
-
+    var showContent = function() {
         // toggle content visibility
         $('#sections, #ruler').show();
+        $('#expand').fadeIn();
         $('#tagline').hide();
 
         // slide up
         $('#header').animate({height: '30%'}, animToggle*800);
         $('#spacer').animate({height: '40%'}, animToggle*800)
 
-        var target = $(this).target();
-        $(this).target().fadeIn().siblings().hide();
-
         // always animate after the first time
         animToggle = true;
+    }
+
+    $('h1').click(function() {
+        if ($(this).hasClass('active')) {
+            $('a[href="#about"]').click();
+        } else {
+            window.location.hash = '';
+            showBigPic();
+        }
+    });
+
+    $.fn.target = function() {return $(this.attr('href'));}
+    // content view: one section expanded
+    $('#nav a[href^="#"]').click(function(event) {
+        // add hash and show content
+        event.preventDefault();
+        window.location.hash = $(this).attr('href');
+        $(this).target().fadeIn().siblings().hide();
+
+        // add classes
+        $('#nav a, h1').removeClass('active');
+        $(this).addClass('active');
+
+        showContent();
     });
 
     // load subpage when loaded from query string
@@ -87,10 +81,11 @@ $(document).ready(function() {
     if (clickedLink.length === 1)
         $('a[href="' + window.location.hash + '"]').click()
     else
-        showDefaultView()
+        showBigPic()
+
+    $('#expand').click(showBigPic);
 
     // external link icons
-    // $('a[href^="http"]').after(' <i class="fa fa-external-link"></i>');
     $('a[href$="pdf"]').after(' <i class="fa fa-file-o"></i>');
 
     var cycleBackgrounds = function() {

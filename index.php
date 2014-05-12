@@ -13,24 +13,14 @@
 #header { <?
     $BG_IMAGES = [
         [
-            'name' => 'palm',
-            'desc' => 'Plant in the <a href="https://en.wikipedia.org/wiki/Allan_Green_Conservatory">Allan Green Conservatory</a>',
-            'date' => '20 November 2005'
-        ],
-        [
-            'name' => 'stars',
-            'desc' => 'Long exposure of the night sky from <a href="https://maps.google.com/maps?ll=-31.903082,115.761663&spn=0.011185,0.009474&t=m&z=17&layer=c&cbll=-31.902415,115.761132&panoid=-npX7AhWBTPSnr7ESXEtRQ&cbp=12,298.26,,0,-44.85">Scarborough</a>',
-            'date' => '21 December 2005'
+            'name' => 'hang',
+            'desc' => 'Flying at <a href="http://dynamicflight.com.au">Dynamic Flight Hang Gliding School</a>',
+            'date' => '23 April 2014'
         ],
         [
             'name' => 'sunset',
             'desc' => 'Sunset in the <a href="https://en.wikipedia.org/wiki/Blue_Mountains_(New_South_Wales)">Blue Mountains</a>',
             'date' => '10 August 2006'
-        ],
-        [
-            'name' => 'narrows',
-            'desc' => 'The <a href="https://en.wikipedia.org/wiki/Narrows_Bridge_(Perth)">Narrows Bridge</a>',
-            'date' => '13 April 2013'
         ],
         [
             'name' => 'nyc',
@@ -46,9 +36,6 @@
 
     $img = $BG_IMAGES[array_rand($BG_IMAGES)];
     echo "background-image: url('/home/backgrounds/".$img['name'].".jpg');"; ?>
-    background-position: center right;
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 </style>
 <script type="text/javascript">
@@ -69,6 +56,7 @@ window.BG_IMAGES = <?
         <li><i class="fa fa-globe"></i><a href="#contact">contact</a></li>
     </ul>
     <p id="tagline">Perth, Western Australia</p>
+    <i id="expand" class="fa fa-arrows-v"></i>
     <i id="refresh" class="fa fa-refresh"></i>
     <p id="caption"><?= $img['desc'] ?></p>
 </div><!-- end #header -->
@@ -85,7 +73,8 @@ window.BG_IMAGES = <?
     ?> live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
     Australia</a>. I studied law and pure mathematics at <a
     href="http://uwa.edu.au">UWA</a> and currently work as a programmer at
-    <a href="http://ii.net">iiNet</a>.</p>
+    <a href="http://ii.net">iiNet</a>. I also teach calculus at 
+    <a href="http://pibt.wa.edu.au/">PIBT</a>.</p>
 
     <div id="books">
     <? include('goodreads.html'); ?>
