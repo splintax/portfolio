@@ -79,7 +79,9 @@ window.BG_IMAGES = <?
     <div id="books">
     <? include('goodreads.html'); ?>
     </div><!-- end #books -->
+
 </div><!-- end #about -->
+
 <? include('projects.html') ?>
 
 <div id="contact">

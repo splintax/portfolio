@@ -35,13 +35,11 @@ currentExtrasTemplate = string.Template("""
         <span class="done" style="width: ${done}em"></span><span class="left" style="width: ${left}em"></span>
         <small>${percent}%</small>
     </span>
-    <small>updated on ${last_read}</small>
-""")
+    <small>updated on ${last_read}</small>""")
 
 completedExtrasTemplate = string.Template("""
     <span class="rating">${stars}</span>
-    <small>finished on ${read_at}</small>
-""")
+    <small>finished on ${read_at}</small>""")
 
 with open(os.path.expanduser('~splintax/.goodreads-api-key'), 'r') as fd:
     API_KEY = fd.read()
@@ -117,6 +115,7 @@ def getBooks(shelf, count):
         'v':        2,
         'id':       6901419, # Scott Young
         'shelf':    shelf,
+        'sort':     'date_updated',
         'per_page': count,
     })
     et = parseXml(response)
