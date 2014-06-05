@@ -11,14 +11,13 @@ Instead, this script should be run periodically by cron.
 import datetime
 import json
 import os
-import requests
+import grequests
 import string
 from xml.etree import ElementTree
 
 mainTemplate = string.Template("""
     <h3>What I've been reading lately</h3>
-    ${currentBooks}
-    ${completedBooks}
+    ${latelyReadingHtml}
 """)
 
 bookTemplate = string.Template("""
@@ -51,7 +50,9 @@ def cleanDate(string):
         date = datetime.datetime.strptime(string, '%Y-%m-%d')
     else:
         # Tue Dec 17 00:00:00 -0800 2013
-        date = datetime.datetime.strptime(string, '%a %b %d %H:%M:%S %z %Y')
+        words = string.split()
+        string = ' '.join(words[:-2]) + ' ' + words[-1]
+        date = datetime.datetime.strptime(string, '%a %b %d %H:%M:%S %Y')
     return date.strftime('%d %B %Y').lstrip('0')
 
 # Current books have a progress indicator.
@@ -85,8 +86,7 @@ def completedExtras(et):
 def apiCall(method, params):
     url = 'https://www.goodreads.com/' + method
     params.update({'key':  API_KEY})
-    response = requests.get(url, data=params).content
-    return response
+    return grequests.get(url, data=params)
 
 def parseXml(string):
     try:
@@ -99,8 +99,8 @@ def parseBook(string, shelf):
     et = parseXml(string)
     title = et.find('.//title').text
     print("Parsing '{}'.".format(title))
-    if shelf   == 'currently-reading': extras = currentExtras(et)
-    elif shelf == 'read':              extras = completedExtras(et)
+    if shelf[0]   == 'currently-reading': extras = currentExtras(et)
+    elif shelf[0] == 'read':              extras = completedExtras(et)
     else: raise Exception(shelf)
     return bookTemplate.substitute({
         'title': title,
@@ -109,26 +109,33 @@ def parseBook(string, shelf):
         'extras': extras,
     })
 
-def getBooks(shelf, count):
+def getShelf(shelf, count):
     print("Listing shelf '{}'.".format(shelf))
-    response = apiCall('review/list', {
+    return apiCall('review/list', {
         'v':        2,
         'id':       6901419, # Scott Young
         'shelf':    shelf,
         'sort':     'date_updated',
         'per_page': count,
     })
-    et = parseXml(response)
-    review_ids = [el.text for el in et.findall('.//review/id')]
-    html = ''
-    for i in review_ids:
-        response = apiCall('review/show.xml', {'id': i})
-        html += parseBook(response, shelf)
-    return html
+
+def getReviewIds(shelf_response):
+    et = parseXml(shelf_response.content)
+    return (el.text for el in et.findall('.//review/id'))
+
+def getBooks(pair):
+    reviewIdList, shelf = pair
+    review_reqs = (apiCall('review/show.xml', {'id': i}) for i in reviewIdList)
+    review_resps = grequests.map(review_reqs)
+    htmls = (parseBook(resp.content, shelf) for resp in review_resps)
+    return '\n'.join(htmls)
+
+shelves = [('currently-reading', 2), ('read', 3)]
+responses = grequests.map(getShelf(s, c) for s, c in shelves)
+reviewIdLists = map(getReviewIds, responses)
 
 html = mainTemplate.substitute({
-    'currentBooks': getBooks('currently-reading', 2),
-    'completedBooks': getBooks('read', 3),
+    'latelyReadingHtml': '\n'.join(map(getBooks, zip(reviewIdLists, shelves)))
 })
 
 with open('/home/wheel/splintax/public-html/sjy.id.au/home/goodreads.html', 'w') as fd:
