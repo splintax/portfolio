@@ -15,6 +15,13 @@ import grequests
 import string
 from xml.etree import ElementTree
 
+PATHS = {
+    'api-key': os.path.expanduser('~/.goodreads-api-key'),
+    'html': os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'goodreads.html'),
+}
+
 mainTemplate = string.Template("""
     <h3>What I've been reading lately</h3>
     ${latelyReadingHtml}
@@ -40,7 +47,7 @@ completedExtrasTemplate = string.Template("""
     <span class="rating">${stars}</span>
     <small>finished on ${read_at}</small>""")
 
-with open(os.path.expanduser('~splintax/.goodreads-api-key'), 'r') as fd:
+with open(PATHS['api-key'], 'r') as fd:
     API_KEY = fd.read()
 
 def cleanDate(string):
@@ -138,6 +145,6 @@ html = mainTemplate.substitute({
     'latelyReadingHtml': '\n'.join(map(getBooks, zip(reviewIdLists, shelves)))
 })
 
-with open('/home/wheel/splintax/public-html/sjy.id.au/home/goodreads.html', 'w') as fd:
+with open(PATHS['html'], 'w') as fd:
     fd.write(html)
     print("goodreads.html updated.")
