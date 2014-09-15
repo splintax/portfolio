@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 """
 Queries the Goodreads API for my currently-reading and read
 bookshelves, and writes formatted HTML output to goodreads.html.
