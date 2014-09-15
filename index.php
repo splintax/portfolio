@@ -66,15 +66,10 @@ window.BG_IMAGES = <?
 <div id="about">
     <img src="/home/perth-small.jpg" class="photo" alt="perth's skyline">
     <p>I'm Scott and <code>sjy.id.au</code> is my part of the Internet.</p>
-    <p>I <?
-        echo 'am '; $now = new DateTime();
-        echo $now->diff(new DateTime('1990-08-28'))->y;
-        echo ' years old and';
-    ?> live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
+    <p>I live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
     Australia</a>. I studied law and pure mathematics at <a
     href="http://uwa.edu.au">UWA</a> and currently work as a programmer at
-    <a href="http://ii.net">iiNet</a>. I also teach calculus at 
-    <a href="http://pibt.wa.edu.au/">PIBT</a>.</p>
+    <a href="http://ii.net">iiNet</a>.</p>
 
     <div id="books">
     <? include('goodreads.html'); ?>
