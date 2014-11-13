@@ -125,6 +125,7 @@ img.photo {
 #books .done, #books .left {border: 1px black solid; display: inline-block; height: 0.5em;}
 #books .done {background-color: #1240ab; border-radius: 5px 0 0 5px;}
 #books .left {border-radius: 0 5px 5px 0;}
+#books .more {text-align: center; font-size: smaller;}
 
 #nav {display: inline;}
 @media only screen and (max-width : 1200px) {

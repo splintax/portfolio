@@ -72,6 +72,9 @@ window.BG_IMAGES = <?
 
     <div id="books">
     <? include('goodreads.html'); ?>
+        <p class="more">
+            <a href="https://www.goodreads.com/review/list/6901419-scott?shelf=read">(more...)</a>
+        </p>
     </div><!-- end #books -->
 
 </div><!-- end #about -->
