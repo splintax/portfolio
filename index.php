@@ -68,8 +68,7 @@ window.BG_IMAGES = <?
     <p>I'm Scott and <code>sjy.id.au</code> is my part of the Internet.</p>
     <p>I live in <a href="http://en.wikipedia.org/wiki/Perth">Perth, Western
     Australia</a>. I studied law and pure mathematics at <a
-    href="http://uwa.edu.au">UWA</a> and currently work as a programmer at
-    <a href="http://ii.net">iiNet</a>.</p>
+    href="http://uwa.edu.au">UWA</a>.</p>
 
     <div id="books">
     <? include('goodreads.html'); ?>
