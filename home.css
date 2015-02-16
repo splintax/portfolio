@@ -111,6 +111,8 @@ img.photo {
 #sections #contact .fa-external-link {display: none;}
 #sections #contact li {list-style-type: none; margin-bottom: 1em;}
 
+#sections #projects p {font-size: 12pt; text-align: center;}
+
 .fa {text-indent: 0; font-size: 70%;}
 #nav .fa {margin-right: 0.5em;}
 
