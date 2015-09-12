@@ -146,5 +146,5 @@ html = mainTemplate.substitute({
 })
 
 with open(PATHS['html'], 'w') as fd:
-    fd.write(html)
+    fd.write(html.encode('utf-8'))
     print("goodreads.html updated.")
