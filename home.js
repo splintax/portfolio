@@ -86,7 +86,7 @@ $(document).ready(function() {
     $('#expand').click(showBigPic);
 
     // external link icons
-    $('a[href$="pdf"]').after(' <i class="fa fa-file-o"></i>');
+    $('a[href$="pdf"]').after(' <i class="fa fa-file-pdf-o"></i>');
 
     var cycleBackgrounds = function() {
         $('#header').css({opacity: 0});

@@ -113,7 +113,7 @@ img.photo {
 
 #sections #projects p {font-size: 12pt; text-align: center;}
 
-.fa {text-indent: 0; font-size: 70%;}
+.fa.fa-file-pdf-o {font-size: 0.8em; margin-left: 0.1em;}
 #nav .fa {margin-right: 0.5em;}
 
 #ruler {text-align: center; clear: both;}
