@@ -41,11 +41,11 @@ currentExtrasTemplate = string.Template("""
         <span class="done" style="width: ${done}em"></span><span class="left" style="width: ${left}em"></span>
         <small>${percent}%</small>
     </span>
-    <small>updated on ${last_read}</small>""")
+    <small>updated on ${date}</small>""")
 
 completedExtrasTemplate = string.Template("""
     <span class="rating">${stars}</span>
-    <small>finished on ${read_at}</small>""")
+    <small>finished on ${date}</small>""")
 
 with open(PATHS['api-key'], 'r') as fd:
     API_KEY = fd.read()
@@ -60,7 +60,7 @@ def cleanDate(string):
         words = string.split()
         string = ' '.join(words[:-2]) + ' ' + words[-1]
         date = datetime.datetime.strptime(string, '%a %b %d %H:%M:%S %Y')
-    return date.strftime('%d %B %Y').lstrip('0')
+    return date
 
 # Current books have a progress indicator.
 def currentExtras(et):
@@ -72,12 +72,12 @@ def currentExtras(et):
         pages_done = float(et.find('.//user_status[1]/page').text)
         percent = pages_total / pages_done * 100
     last_read = cleanDate(et.find('.//user_status[1]/updated_at').text)
-    return currentExtrasTemplate.substitute({
-        'last_read': last_read,
+    return {
+        'date': last_read,
         'percent': int(percent),
         'done': (percent/100) * 4,
         'left': (1 - percent/100) * 4,
-    })
+    }
 
 # Completed books have a rating.
 def completedExtras(et):
@@ -85,10 +85,10 @@ def completedExtras(et):
     blackStars = '<i class="fa fa-star"></i>'  *   rating
     whiteStars = '<i class="fa fa-star-o"></i>'* (5-rating)
     read_at = cleanDate(et.find('.//read_at').text)
-    return completedExtrasTemplate.substitute({
-        'read_at': read_at,
+    return {
+        'date': read_at,
         'stars': blackStars + whiteStars,
-    })
+    }
 
 def apiCall(method, params):
     url = 'https://www.goodreads.com/' + method
@@ -109,12 +109,12 @@ def parseBook(string, shelf):
     if shelf[0]   == 'currently-reading': extras = currentExtras(et)
     elif shelf[0] == 'read':              extras = completedExtras(et)
     else: raise Exception(shelf)
-    return bookTemplate.substitute({
+    return {
         'title': title,
         'author': et.find('.//author/name').text,
         'link': et.find('.//review/link').text,
         'extras': extras,
-    })
+    }
 
 def getShelf(shelf, count):
     print("Listing shelf '{}'.".format(shelf))
@@ -122,8 +122,8 @@ def getShelf(shelf, count):
         'v':        2,
         'id':       6901419, # Scott Young
         'shelf':    shelf,
-        'sort':     'date_updated',
-        'per_page': count,
+        # 'sort':     'date_updated', # seems broken 20150915
+        # 'per_page': count,          # seems broken 20150915
     })
 
 def getReviewIds(shelf_response):
@@ -134,8 +134,21 @@ def getBooks(pair):
     reviewIdList, shelf = pair
     review_reqs = (apiCall('review/show.xml', {'id': i}) for i in reviewIdList)
     review_resps = grequests.map(review_reqs)
-    htmls = (parseBook(resp.content, shelf) for resp in review_resps)
-    return '\n'.join(htmls)
+    books = [parseBook(resp.content, shelf) for resp in review_resps]
+
+    # sort manually because goodreads api is bullshit
+    books.sort(key=lambda b: b['extras']['date'], reverse=True)
+
+    # truncate manually because goodreads api is bullshit
+    books = books[:5] # max reviews per shelf
+
+    # render extras
+    for b in books:
+        t = currentExtrasTemplate if 'percent' in b['extras'] else completedExtrasTemplate
+        b['extras']['date'] = b['extras']['date'].strftime('%d %B %Y').lstrip('0')
+        b['extras'] = t.substitute(b['extras'])
+
+    return '\n'.join(map(bookTemplate.substitute, books))
 
 shelves = [('currently-reading', 2), ('read', 3)]
 responses = grequests.map(getShelf(s, c) for s, c in shelves)
