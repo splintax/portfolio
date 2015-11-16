@@ -10,38 +10,33 @@
 <link href="/home/home.css" rel="stylesheet">
 <link href="/home/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <style type="text/css">
-#header { <?
-    $BG_IMAGES = [
-        [
-            'name' => 'hang',
-            'desc' => 'Flying at <a href="http://dynamicflight.com.au">Dynamic Flight Hang Gliding School</a>',
-            'date' => '23 April 2014'
-        ],
-        [
-            'name' => 'sunset',
-            'desc' => 'Sunset in the <a href="https://en.wikipedia.org/wiki/Blue_Mountains_(New_South_Wales)">Blue Mountains</a>',
-            'date' => '10 August 2006'
-        ],
-        [
-            'name' => 'nyc',
-            'desc' => 'Sunset from the <a href="https://en.wikipedia.org/wiki/Staten_Island_Ferry">Staten Island Ferry</a>',
-            'date' => '26 September 2013'
-        ],
-        [
-            'name' => 'dcmetro',
-            'desc' => '<a href="https://en.wikipedia.org/wiki/Metro_Center_(Washington_Metro)">Metro Center</a> station in Washington, D.C.',
-            'date' => '2 October 2013'
-        ],
-    ];
-
-    $img = $BG_IMAGES[array_rand($BG_IMAGES)];
-    echo "background-image: url('/home/backgrounds/".$img['name'].".jpg');"; ?>
+#header {
+    background-image: url('/home/backgrounds/sunset.jpg');
 }
 </style>
 <script type="text/javascript">
-window.BG_IMAGES = <?
-    // preserve ordering for cycling backgrounds later
-    echo json_encode($BG_IMAGES) ?>
+window.BG_IMAGES = [
+{
+    'name': 'hang',
+    'desc': 'Flying at <a href="http://dynamicflight.com.au">Dynamic Flight Hang Gliding School</a>',
+    'date': '23 April 2014'
+},
+{
+    'name': 'sunset',
+    'desc': 'Sunset in the <a href="https://en.wikipedia.org/wiki/Blue_Mountains_(New_South_Wales)">Blue Mountains</a>',
+    'date': '10 August 2006'
+},
+{
+    'name': 'nyc',
+    'desc': 'Sunset from the <a href="https://en.wikipedia.org/wiki/Staten_Island_Ferry">Staten Island Ferry</a>',
+    'date': '26 September 2013'
+},
+{
+    'name': 'dcmetro',
+    'desc': '<a href="https://en.wikipedia.org/wiki/Metro_Center_(Washington_Metro)">Metro Center</a> station in Washington, D.C.',
+    'date': '2 October 2013'
+}
+];
 </script>
 </head>
 
@@ -71,7 +66,7 @@ window.BG_IMAGES = <?
     href="http://uwa.edu.au">UWA</a>.</p>
 
     <div id="books">
-    <? include('goodreads.html'); ?>
+    <!--#include virtual="goodreads.html" -->
         <p class="more">
             <a href="https://www.goodreads.com/review/list/6901419-scott?shelf=read">(more...)</a>
         </p>
@@ -79,7 +74,7 @@ window.BG_IMAGES = <?
 
 </div><!-- end #about -->
 
-<? include('projects.html') ?>
+<!--#include virtual="projects.html" -->
 
 <div id="contact">
 <ul>

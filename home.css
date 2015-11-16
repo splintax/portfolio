@@ -117,8 +117,8 @@ img.photo {
 #nav .fa {margin-right: 0.5em;}
 
 #ruler {text-align: center; clear: both;}
-#books {clear: both;}
-#books h3 {margin-bottom: -1em; padding-top: 1em;}
+#books {clear: both; font-size: 80%;}
+#books h3 {margin-bottom: -1em; padding: 1em;}
 #books .book + h3 {padding-top: 2em;}
 #books .book {padding-top: 0.5em; margin-top: 0.5em; min-height: 4em; overflow: auto; text-align: center;}
 #books .book + .book {border-top: 1px #ccc dotted;}
